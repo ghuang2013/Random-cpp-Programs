@@ -7,7 +7,6 @@ template <class T>
 void BST<T>::addElement(const T& value)
 {
 	addElement(value, this->root);
-	return;
 }
 
 template <class T>
@@ -76,8 +75,8 @@ const std::shared_ptr<pNode<T>>& BST<T>::findParent(const T& value,
 template <class T>
 void BST<T>::removeElement(const T& value, std::shared_ptr<Node> &currentR)
 {
-	auto linking = [](std::shared_ptr<Node>& parentP, const T& key,	
-		const std::shared_ptr<Node>& newNext)
+	auto linking = [](std::shared_ptr<Node>& parentP, const std::shared_ptr<Node>& newNext,
+		const T& key)
 	{	(key > parentP->getKey()) ? parentP->setRight(newNext) : parentP->setLeft(newNext); };
 
 	if (!currentR)
@@ -89,7 +88,7 @@ void BST<T>::removeElement(const T& value, std::shared_ptr<Node> &currentR)
 	{
 		auto parent = findParent(value, currentR, this->root);
 		if (parent == nullptr) root = nullptr;
-		else linking(parent, currentR->getKey(), nullptr);
+		else linking(parent, nullptr, currentR->getKey());
 		currentR.reset();
 	}
 	else if (currentR->getLeft() == nullptr) //if it has only right child
@@ -101,7 +100,7 @@ void BST<T>::removeElement(const T& value, std::shared_ptr<Node> &currentR)
 			return;
 		}
 		auto parent = findParent(value, currentR, this->root); //find the parent of this node
-		linking(parent, currentR->getKey(), currentR->getRight());
+		linking(parent, currentR->getRight(), currentR->getKey());
 		currentR.reset();
 	}
 	else if (currentR->getRight() == nullptr) //if it has only left child
@@ -113,7 +112,7 @@ void BST<T>::removeElement(const T& value, std::shared_ptr<Node> &currentR)
 			return;
 		}
 		auto parent = findParent(value, currentR, this->root); 
-		linking(parent, currentR->getKey(), currentR->getLeft());
+		linking(parent, currentR->getLeft(), currentR->getKey());
 		currentR.reset();
 	}
 	else //most complicated case
