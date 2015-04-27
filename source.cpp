@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <limits>
 #include <stack>
+#include <stdexcept>
 
 using namespace std;
 
@@ -23,11 +24,11 @@ private:
 	Node* insert (Node* currentNode, const int& val) {
 		if (currentNode == nullptr)
 			return new Node (val);
-		if (val < currentNode->value) {
+		if (val <= currentNode->value) {
 			currentNode->left = insert (currentNode->left, val);
 			//return currentNode;
 		}
-		else if (val > currentNode->value) {
+		else if (val >= currentNode->value) {
 			currentNode->right = insert (currentNode->right, val);
 			//return currentNode;
 		}
@@ -128,7 +129,7 @@ public:
 	int smallestEvenWithStack () {
 		stack<Node*>s;
 		Node* n = root;
-		while (root != nullptr || !s.empty ()) {
+		while (n != nullptr || !s.empty ()) {
 			for (; n != nullptr; n = n->left) {
 				if (n->value % 2 == 0) {
 					return n->value;
@@ -140,22 +141,26 @@ public:
 				s.pop ();
 			}
 		}
-		return -999;
+		throw runtime_error ("\nThere is no even number\n");
 	}
 };
 
 int main () {
-	Binary_Tree bst ({ -5, 7, -2, -6, 8, 9, -9, 0 });
-	cout << "Display bst: \n" << bst;
-	cout << "\nSum of bst: " << bst.sumOfBST ();
-	cout << "\nCount bst: " << bst.countNode ();
-	cout << "\nCount positive bst: " << bst.countPositive ();
-	cout << "\nSmallest even number: " << bst.smallestEvenWithStack ();
-	Binary_Tree bst2 ({ 3, 1, 5, 2, 4, 6 });
-	cout << "\nDisplay bst2: \n" << bst2;
-	cout << "\nSum of bst2: " << bst2.sumOfBST ();
-	cout << "\nCount bst2: " << bst2.countNode ();
-	cout << "\nSmallest even number: " << bst2.smallestEvenWithStack ();
-	cout << endl;
+	try {
+		Binary_Tree bst ({ -5, 7, -2, -6, 8, 9, -9, 0 });
+		cout << "Display bst: \n" << bst;
+		cout << "\nSum of bst: " << bst.sumOfBST ();
+		cout << "\nCount bst: " << bst.countNode ();
+		cout << "\nCount positive bst: " << bst.countPositive ();
+		cout << "\nSmallest even number: " << bst.smallestEvenWithStack ();
+		Binary_Tree bst2 ({ 3, 1, 5, 9, 5, 1 });
+		cout << "\nDisplay bst2: \n" << bst2;
+		cout << "\nSum of bst2: " << bst2.sumOfBST ();
+		cout << "\nCount bst2: " << bst2.countNode ();
+		cout << "\nSmallest even number: " << bst2.smallestEvenWithStack ();
+		cout << endl;
+	} catch (exception exp) {
+		cout << exp.what ();
+	}
 	return 0;
 }
