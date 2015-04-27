@@ -107,7 +107,7 @@ private:
 		return smallest;
 	}
 public:
-	Binary_Tree (const initializer_list<int>& list) {
+	Binary_Tree (const initializer_list<int>& list):root{nullptr} {
 		for (const auto& num : list)
 			this->root = insert (root, num);
 	}
