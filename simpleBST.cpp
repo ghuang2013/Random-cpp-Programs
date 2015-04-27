@@ -153,7 +153,7 @@ public:
 		}
 		throw runtime_error ("\nThere is no even number");
 	}
-	bool search (const int& val) {
+	bool search (const int& val) const {
 		return search (root, val);
 	}
 };
