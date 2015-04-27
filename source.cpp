@@ -35,7 +35,17 @@ private:
 		//currentNode keeps track of the current state
 		return currentNode;
 	}
-	int sumOfBST (Node* currentNode) {
+	bool search (Node* currentNode, const int &val) const {
+		if (currentNode == nullptr)
+			return false;
+		if (currentNode->value == val)
+			return true;
+		else if (val < currentNode->value)
+			return search (currentNode->left, val);
+		else
+			return search (currentNode->right, val);
+	}
+	int sumOfBST (Node* currentNode) const {
 		if (currentNode == nullptr)
 			return 0;
 		return currentNode->value + sumOfBST (currentNode->left) + sumOfBST (currentNode->right);
@@ -71,12 +81,12 @@ private:
 		pre_order (currentNode->right, function);
 		function (currentNode);
 	}
-	int countNode (Node* currentNode) {
+	int countNode (Node* currentNode) const {
 		if (currentNode == nullptr)
 			return 0;
 		return 1 + countNode (currentNode->left) + countNode (currentNode->right);
 	}
-	int countPositive (Node* currentNode) {
+	int countPositive (Node* currentNode) const {
 		if (currentNode == nullptr)
 			return 0;
 		if (currentNode->value > 0)
@@ -84,12 +94,12 @@ private:
 		else
 			return countPositive (currentNode->right);
 	}
-	int findHeight (Node* currentNode) {
+	int findHeight (Node* currentNode) const {
 		if (currentNode == nullptr)
 			return 0;
 		return 1 + max (findHeight (currentNode->left), findHeight (currentNode->right));
 	}
-	int smallestEven (Node* currentNode) {
+	int smallestEven (Node* currentNode) const {
 		int smallest = std::numeric_limits<int>::max ();
 		travesal (currentNode, [&] (const int& val) {
 			if (val % 2 == 0 && val < smallest) smallest = val;
@@ -114,19 +124,19 @@ public:
 			out << val << ' ';	});
 		return out;
 	}
-	int sumOfBST () {
+	int sumOfBST () const {
 		return sumOfBST (this->root);
 	}
-	int countNode () {
+	int countNode () const {
 		return countNode (this->root);
 	}
-	int countPositive () {
+	int countPositive () const {
 		return countPositive (this->root);
 	}
-	int smallestEven () {
+	int smallestEven () const {
 		return smallestEven (this->root);
 	}
-	int smallestEvenWithStack () {
+	int smallestEvenWithStack () const {
 		stack<Node*>s;
 		Node* n = root;
 		while (n != nullptr || !s.empty ()) {
@@ -141,26 +151,39 @@ public:
 				s.pop ();
 			}
 		}
-		throw runtime_error ("\nThere is no even number\n");
+		throw runtime_error ("\nThere is no even number");
+	}
+	bool search (const int& val) {
+		return search (root, val);
 	}
 };
 
 int main () {
-	try {
 		Binary_Tree bst ({ -5, 7, -2, -6, 8, 9, -9, 0 });
 		cout << "Display bst: \n" << bst;
 		cout << "\nSum of bst: " << bst.sumOfBST ();
 		cout << "\nCount bst: " << bst.countNode ();
 		cout << "\nCount positive bst: " << bst.countPositive ();
+		try {
 		cout << "\nSmallest even number: " << bst.smallestEvenWithStack ();
+		} catch (exception exp) {
+			cout << exp.what ();
+		}
+		cout << '\n' << boolalpha << bst.search (-9);
+		cout << '\n' << boolalpha << bst.search (-2);
+		cout << '\n' << boolalpha << bst.search (-4);
 		Binary_Tree bst2 ({ 3, 1, 5, 9, 5, 1 });
 		cout << "\nDisplay bst2: \n" << bst2;
 		cout << "\nSum of bst2: " << bst2.sumOfBST ();
 		cout << "\nCount bst2: " << bst2.countNode ();
-		cout << "\nSmallest even number: " << bst2.smallestEvenWithStack ();
+		try {
+			cout << "\nSmallest even number: " << bst2.smallestEvenWithStack ();
+		} catch (exception exp) {
+			cout << exp.what ();
+		}
+		cout << '\n' << boolalpha << bst2.search (9);
+		cout << '\n' << boolalpha << bst2.search (2);
+		cout << '\n' << boolalpha << bst2.search (4);
 		cout << endl;
-	} catch (exception exp) {
-		cout << exp.what ();
-	}
 	return 0;
 }
